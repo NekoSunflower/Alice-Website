@@ -39,6 +39,8 @@
           <el-select v-model="externalAppInfo.type" autocomplete="off">
             <el-option label="百度AIP" value="baidu"></el-option>
             <el-option label="VULTR" value="vultr"></el-option>
+            <el-option label="Google登录" value="google_oauth2"></el-option>
+            <el-option label="QQ登录" value="qq_oauth2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="应用ID" label-width="120px">

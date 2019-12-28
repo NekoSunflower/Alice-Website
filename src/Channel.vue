@@ -1,31 +1,14 @@
 <template>
   <div>
     <el-button
-      v-if="account.admin"
       type="primary"
       size="medium"
       icon="el-icon-plus"
       @click="
-        (channelInfo = { autoBalance: false, defaultCropConf: {} }),
-          (addVisible = true)
+        (channelInfo = { defaultBroadcastConfig: {} }), (addVisible = true)
       "
       :loading="loading"
-      >添加频道</el-button
-    >
-    <el-tag
-      type="info"
-      v-if="!account.admin"
-      disable-transitions
-      color="#fff"
-      style="border:none"
-      class="el-icon-info"
-    >
-      如需添加、删除频道请联系管理员，QQ群：
-      <a
-        href="tencent://groupwpa/?subcmd=all&param=7B2267726F757055696E223A3933363631383137322C2274696D655374616D70223A313534323934373835347D0A"
-        >936618172</a
-      >
-    </el-tag>
+    >添加频道</el-button>
     <el-input
       style="float:right;width:280px;"
       placeholder="请输入频道名称、频道地址筛选条件"
@@ -40,16 +23,27 @@
       :filter="filter"
       :loading="loading"
     >
-      <el-table-column label="允许推流调配" width="150px">
+      <el-table-column
+        label="自动推流"
+        width="160px"
+      >
         <template slot-scope="scope">
           <i
             class="el-icon-success"
             style="color:#67C23A"
-            v-show="scope.row.autoBalance"
+            v-show="scope.row.defaultBroadcastConfig.autoBroadcast"
+          ></i>
+          <i
+            class="el-icon-error"
+            style="color:#F56C6C"
+            v-show="!scope.row.defaultBroadcastConfig.autoBroadcast"
           ></i>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="160px">
+      <el-table-column
+        label="操作"
+        width="160px"
+      >
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -58,8 +52,7 @@
               (channelInfo = JSON.parse(JSON.stringify(scope.row))),
                 (editVisible = true)
             "
-            >编辑</el-button
-          >
+          >编辑</el-button>
           <el-popover
             placement="bottom"
             width="200"
@@ -71,21 +64,23 @@
                 type="primary"
                 size="mini"
                 @click="removeChannel(scope.$index, scope.row)"
-                >继续</el-button
-              >
+              >继续</el-button>
             </div>
             <el-button
               slot="reference"
               size="mini"
               type="danger"
               v-if="account.admin"
-              >删除</el-button
-            >
+            >删除</el-button>
           </el-popover>
         </template>
       </el-table-column>
     </PagedTable>
-    <el-dialog title="频道编辑" :visible.sync="editVisible" width="40%">
+    <el-dialog
+      title="频道编辑"
+      :visible.sync="editVisible"
+      width="640px"
+    >
       <el-form :model="channelInfo">
         <el-form-item
           v-for="item in tableHeader"
@@ -98,52 +93,62 @@
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item label="默认开播分区" label-width="120px">
-          <area-selector
-            v-model="channelInfo.defaultArea"
-            :value="channelInfo.defaultArea"
-          ></area-selector>
+        <el-form-item
+          label="默认开播分区"
+          label-width="120px"
+        >
+          <area-selector v-model="channelInfo.defaultBroadcastConfig.area"></area-selector>
         </el-form-item>
-        <el-form-item label="转播登录Cookie" label-width="120px">
-          <el-input
-            v-model="channelInfo.cookies"
-            autocomplete="off"
-            placeholder="[如无需修改此项请留空]"
-          ></el-input>
+        <el-form-item
+          label="自动推流设置"
+          label-width="120px"
+        >
+          <el-checkbox v-model="channelInfo.defaultBroadcastConfig.autoBroadcast">自动推流</el-checkbox>
+          <el-checkbox
+            v-if="channelInfo.defaultBroadcastConfig.autoBroadcast"
+            v-model="channelInfo.defaultBroadcastConfig.autoBlur"
+          >
+            自动评论区打码
+            <el-tooltip
+              v-if="channelInfo.defaultBroadcastConfig.autoBroadcast"
+              class="item"
+              effect="dark"
+              content="请确保拥有足够的AP点数，否则此设置无效！"
+              placement="top"
+            >
+              <i class="el-icon-warning"></i>
+            </el-tooltip>
+          </el-checkbox>
+          <el-checkbox
+            v-if="channelInfo.defaultBroadcastConfig.autoBroadcast"
+            v-model="channelInfo.defaultBroadcastConfig.autoImageSegment"
+          >自动分离人物形象</el-checkbox>
         </el-form-item>
-        <el-form-item label="其他推流设置" label-width="120px">
-          <el-checkbox v-model="channelInfo.autoBalance"
-            >允许推流调配</el-checkbox
-          >
-          <el-checkbox v-model="channelInfo.needRecord"
-            >自动开启录像</el-checkbox
-          >
-          <el-checkbox v-model="channelInfo.defaultCropConf.autoBlur"
-            >自动评论区打码</el-checkbox
-          >
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="请确保「默认推流账户」拥有足够的AP点数，否则此设置无效！"
-            placement="top"
-          >
-            <i class="el-icon-warning"></i>
-          </el-tooltip>
-          <el-checkbox v-model="channelInfo.defaultCropConf.autoImageSegment"
-            >自动分离人物形象</el-checkbox
-          >
+        <el-form-item
+          label="其他设置"
+          label-width="120px"
+        >
+          <el-checkbox v-model="channelInfo.defaultBroadcastConfig.needRecord">
+            自动开启录像
+          </el-checkbox>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button
           type="primary"
           size="medium"
           @click="(editVisible = false), editChannel()"
-          >保 存</el-button
-        >
+        >保 存</el-button>
       </span>
     </el-dialog>
-    <el-dialog title="频道新增" :visible.sync="addVisible" width="40%">
+    <el-dialog
+      title="频道新增"
+      :visible.sync="addVisible"
+      width="640px"
+    >
       <el-form :model="channelInfo">
         <el-form-item
           v-for="item in tableHeader"
@@ -156,46 +161,16 @@
             autocomplete="off"
           ></el-input>
         </el-form-item>
-        <el-form-item label="默认开播分区" label-width="120px">
-          <area-selector v-model="channelInfo.defaultArea"></area-selector>
-        </el-form-item>
-        <el-form-item label="转播登录Cookie" label-width="120px">
-          <el-input
-            v-model="channelInfo.cookies"
-            autocomplete="off"
-            placeholder="如转播的节目为收费/会员专享节目，请输入对应平台的转播登录Cookie"
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="其他推流设置" label-width="120px">
-          <el-checkbox v-model="channelInfo.autoBalance"
-            >允许推流调配</el-checkbox
-          >
-          <el-checkbox v-model="channelInfo.needRecord"
-            >自动开启录像</el-checkbox
-          >
-          <el-checkbox v-model="channelInfo.defaultCropConf.autoBlur"
-            >自动评论区打码</el-checkbox
-          >
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="请确保「默认推流账户」拥有足够的AP点数，否则此设置无效！"
-            placement="top"
-          >
-            <i class="el-icon-warning"></i>
-          </el-tooltip>
-          <el-checkbox v-model="channelInfo.defaultCropConf.autoImageSegment"
-            >自动分离人物形象</el-checkbox
-          >
-        </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
         <el-button
           type="primary"
           size="medium"
           @click="(addVisible = false), addChannel()"
-          >新 增</el-button
-        >
+        >新 增</el-button>
       </span>
     </el-dialog>
   </div>
@@ -225,16 +200,14 @@ export default {
       account: JSON.parse(sessionStorage.getItem("account")),
       tableData: [],
       tableHeader: [
-        { prop: "channelName", label: "频道名称" },
-        { prop: "channelUrl", label: "频道地址", width: "460px" },
-        { prop: "defaultAccountId", label: "默认推流账户" },
-        { prop: "dynamicPostAccountId", label: "动态推送账户" }
+        { prop: "channelName", label: "频道名称", width: "300px" },
+        { prop: "channelUrl", label: "频道地址" }
       ],
       loading: false,
       editVisible: false,
       addVisible: false,
       channelInfo: {
-        defaultCropConf: {}
+        defaultBroadcastConfig: {}
       },
       filter: ""
     };

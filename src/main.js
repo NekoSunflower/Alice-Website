@@ -15,6 +15,7 @@ import Container from './Container.vue'
 import Broadcast from './Broadcast.vue'
 import Channel from './Channel.vue'
 import Account from './Account.vue'
+import MyAccount from './MyAccount.vue'
 import System from './System.vue'
 import Login from "./Login.vue";
 import Server from "./Server.vue";
@@ -42,6 +43,11 @@ const router = new VueRouter({
           path: "account",
           component: Account,
           name: "账号管理"
+        },
+        {
+          path: "myAccount",
+          component: MyAccount,
+          name: "我的账号"
         },
         {
           path: "system",
