@@ -6,6 +6,16 @@
     >
       <el-form :model="account">
         <el-form-item
+          label="账号ID"
+          label-width="120px"
+        >
+          <el-input
+            v-model="account.accountId"
+            autocomplete="off"
+            readonly
+          ></el-input>
+        </el-form-item>
+        <el-form-item
           label="账号描述"
           label-width="120px"
         >
@@ -46,13 +56,35 @@
           </el-select>
         </el-form-item>
         <el-form-item
+          v-if="account.accountSite == 'bilibili'"
           label="推流设置"
           label-width="120px"
         >
           <el-checkbox v-model="account.postBiliDynamic">发送B站开播动态</el-checkbox>
           <el-checkbox v-model="account.autoRoomTitle">自动修改直播间标题</el-checkbox>
         </el-form-item>
+        <template v-if="account.accountSite == 'qq_oauth2' || account.accountSite == 'google_oauth2'">
+          <el-form-item
+            label="串流地址"
+            label-width="120px"
+          >
+            <el-input
+              v-model="account.rtmpHost"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="串流秘钥"
+            label-width="120px"
+          >
+            <el-input
+              v-model="account.rtmpPassword"
+              autocomplete="off"
+            ></el-input>
+          </el-form-item>
+        </template>
         <el-form-item
+          v-else
           label="自动保存Cookies"
           label-width="120px"
         >

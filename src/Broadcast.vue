@@ -25,6 +25,18 @@
       :loading="loading"
     >
       <el-table-column
+        label="是否录像"
+        width="106"
+      >
+        <template slot-scope="scope">
+          <i
+            class="el-icon-success"
+            style="color:#67C23A"
+            v-show="scope.row.needRecord"
+          ></i>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="推流健康度"
         width="106"
       >
@@ -338,16 +350,26 @@ import AreaSelector from "./AreaSelector.vue";
 import CustomLayout from "./CustomLayout.vue";
 export default {
   data() {
-    return {
-      account: JSON.parse(sessionStorage.getItem("account")),
-      tableData: [],
-      tableHeader: [
+    var tableHeader;
+    var account = JSON.parse(sessionStorage.getItem("account"));
+    if (account.isAdmin) {
+      tableHeader = [
         { prop: "nickname", label: "推流账号" },
         { prop: "roomId", label: "直播间ID" },
         { prop: "accountSite", label: "推流平台" },
         { prop: "channelName", label: "节目频道" },
         { prop: "videoTitle", label: "节目标题", width: "460px" }
-      ],
+      ];
+    } else {
+      tableHeader = [
+        { prop: "channelName", label: "节目频道" },
+        { prop: "videoTitle", label: "节目标题", width: "460px" }
+      ];
+    }
+    return {
+      account,
+      tableData: [],
+      tableHeader,
       broadcastCookie: null,
       loading: false,
       detailVisible: false,
@@ -435,8 +457,8 @@ export default {
         //       this.doCropConfSave();
         //     })
         //     .catch(() => {});
-        // } else {
-        //   this.doCropConfSave();
+      } else {
+        this.doCropConfSave();
       }
     },
     doCropConfSave(confirm = false) {
