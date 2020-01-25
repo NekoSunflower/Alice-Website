@@ -457,40 +457,24 @@ export default {
             this.loading = false;
             // 这里是处理正确的回调
             if (response.data.code === 0) {
-              sessionStorage.setItem(
-                "account",
-                JSON.stringify(response.data.data)
-              );
-              this.$router.push({ path: "/main/broadcast" });
+              sessionStorage.setItem("account", JSON.stringify(response.data.data));
+              location.href = "/main/broadcast";
             } else {
               if (response.data.code === -101) {
-                this.$prompt(
-                  <p class="captcha-prompt">
-                    <span>请输入验证码</span>
-                    <img
-                      height="50"
-                      alt="验证码图像"
-                      src={
-                        "/api/login/getCaptcha?accountSite=" +
-                        this.accountSite +
-                        "&_t=" +
-                        new Date().getTime()
-                      }
-                    />
-                  </p>,
-                  "安全验证",
-                  {
-                    confirmButtonText: "确定",
-                    cancelButtonText: "取消",
-                    inputPattern: /.+/,
-                    inputErrorMessage: "请输入验证码"
-                  }
+                var that = this;
+                this.$alert(
+                  <iframe
+                    src={response.data.data}
+                    style="width:100%;height:320px;border:none;"
+                  ></iframe>,
+                  "安全验证"
                 )
-                  .then(({ value }) => {
-                    this.captcha = value.toUpperCase();
-                    this.login();
-                  })
+                  .then(() => {})
                   .catch(() => {});
+                window.loginWithGeeVerify = function(gcData) {
+                  that.captcha = JSON.stringify(gcData);
+                  that.login();
+                };
               }
               this.$message.error(response.data.message);
             }
