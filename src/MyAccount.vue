@@ -112,7 +112,7 @@
         show-icon
       >
       </el-alert>
-      <div v-if="account.parentAccountName">
+      <p v-if="account.parentAccountName">
         此账号已绑定父账号：{{account.parentAccountName}}
         <el-button
           size="medium"
@@ -120,7 +120,7 @@
           :loading="loading"
           @click="unbindParent"
         >解除绑定</el-button>
-      </div>
+      </p>
       <div v-if="!account.parentAccountName">
         <el-input v-model="account.shareCode">
           <el-button
@@ -156,12 +156,14 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-button
-          size="medium"
-          type="primary"
-          :loading="loading"
-          @click="bindShareCode"
-        >绑定共享码</el-button>
+        <p>
+          <el-button
+            size="medium"
+            type="primary"
+            :loading="loading"
+            @click="bindShareCode"
+          >绑定共享码</el-button>
+        </p>
       </div>
 
     </el-tab-pane>
@@ -230,10 +232,16 @@ export default {
           function(response) {
             // 这里是处理正确的回调
             if (response.data.code === 0) {
-              window.location.reload();
+              this.$http.get("/api/account/info.json").then(
+              function(response) {
+                if (response.data.code === 0) {
+                  this.account = response.data.data;
+                }
+              });
             } else {
               this.$message.error(response.data.message);
             }
+            this.loading = false;
           },
           function(response) {
             if (response.status === 401) {
@@ -254,10 +262,16 @@ export default {
               function(response) {
                 // 这里是处理正确的回调
                 if (response.data.code === 0) {
-                  window.location.reload();
+                  this.$http.get("/api/account/info.json").then(
+                  function(response) {
+                    if (response.data.code === 0) {
+                      this.account = response.data.data;
+                    }
+                  });
                 } else {
                   this.$message.error(response.data.message);
                 }
+                this.loading = false;
               },
               function(response) {
                 if (response.status === 401) {
@@ -276,10 +290,16 @@ export default {
         function(response) {
           // 这里是处理正确的回调
           if (response.data.code === 0) {
-            window.location.reload();
+            this.$http.get("/api/account/info.json").then(
+            function(response) {
+              if (response.data.code === 0) {
+                this.account = response.data.data;
+              }
+            });
           } else {
             this.$message.error(response.data.message);
           }
+          this.loading = false;
         },
         function(response) {
           if (response.status === 401) {
@@ -299,6 +319,7 @@ export default {
           } else {
             this.$message.error(response.data.message);
           }
+          this.loading = false;
         },
         function(response) {
           if (response.status === 401) {
@@ -321,8 +342,14 @@ export default {
               message: "账户设置修改成功",
               type: "success"
             });
-            sessionStorage.setItem("account", JSON.stringify(this.account));
-            this.accountList();
+            this.$http.get("/api/account/info.json").then(
+            function(response) {
+              if (response.data.code === 0) {
+                this.account = response.data.data;
+                sessionStorage.setItem("account", JSON.stringify(this.account));
+              }
+            });
+            this.loading = false;
           } else {
             this.$message.error(response.data.message);
             this.loading = false;

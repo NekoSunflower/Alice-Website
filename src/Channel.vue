@@ -41,6 +41,23 @@
         </template>
       </el-table-column>
       <el-table-column
+        label="自动录像"
+        width="160px"
+      >
+        <template slot-scope="scope">
+          <i
+            class="el-icon-success"
+            style="color:#67C23A"
+            v-show="scope.row.defaultBroadcastConfig.needRecord"
+          ></i>
+          <i
+            class="el-icon-error"
+            style="color:#F56C6C"
+            v-show="!scope.row.defaultBroadcastConfig.needRecord"
+          ></i>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="操作"
         width="160px"
       >
@@ -70,7 +87,6 @@
               slot="reference"
               size="mini"
               type="danger"
-              v-if="account.admin"
             >删除</el-button>
           </el-popover>
         </template>
