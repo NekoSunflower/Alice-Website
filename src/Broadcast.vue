@@ -352,7 +352,7 @@ export default {
   data() {
     var tableHeader;
     var account = JSON.parse(sessionStorage.getItem("account"));
-    if (account.isAdmin) {
+    if (account.admin) {
       tableHeader = [
         { prop: "nickname", label: "推流账号" },
         { prop: "roomId", label: "直播间ID" },

@@ -68,6 +68,9 @@ export default {
     filter() {
       this.pageChange(1);
     }
+  },
+  created() {
+    this.pageChange(1);
   }
 };
 </script>

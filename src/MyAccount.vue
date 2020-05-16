@@ -29,9 +29,9 @@
           label-width="120px"
         >
           <el-select
-            size="small"
             v-model="account.broadcastResolution"
             placeholder="请选择转播分辨率"
+            style="width:100%"
           >
             <el-option
               :label="`480P@30FPS 价格:${account.serverPoints[1]}AP/小时`"
@@ -128,8 +128,8 @@
             @click="createShareCode"
           >生成共享码</el-button>
         </el-input>
-        <el-table
-          :data="account.shardAccountIds"
+        <PagedTable
+          :tableData="account.shardAccounts"
           :tableHeader="tableHeader"
         >
           <el-table-column label="操作">
@@ -155,7 +155,7 @@
               </el-popover>
             </template>
           </el-table-column>
-        </el-table>
+        </PagedTable>
         <p>
           <el-button
             size="medium"
@@ -364,6 +364,7 @@ export default {
         }
       );
     }
-  }
+  },
+  components: { PagedTable }
 };
 </script>

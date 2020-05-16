@@ -212,13 +212,24 @@ import PagedTable from "./PagedTable.vue";
 import AreaSelector from "./AreaSelector.vue";
 export default {
   data() {
-    return {
-      account: JSON.parse(sessionStorage.getItem("account")),
-      tableData: [],
-      tableHeader: [
+    var tableHeader;
+    var account = JSON.parse(sessionStorage.getItem("account"));
+    if (account.admin) {
+      tableHeader = [
+        { prop: "nickname", label: "账号昵称" },
         { prop: "channelName", label: "频道名称", width: "300px" },
         { prop: "channelUrl", label: "频道地址" }
-      ],
+      ];
+    } else {
+      tableHeader = [
+        { prop: "channelName", label: "频道名称", width: "300px" },
+        { prop: "channelUrl", label: "频道地址" }
+      ]
+    }
+    return {
+      account,
+      tableData: [],
+      tableHeader,
       loading: false,
       editVisible: false,
       addVisible: false,
