@@ -31,12 +31,12 @@
           <i
             class="el-icon-success"
             style="color:#67C23A"
-            v-show="scope.row.defaultBroadcastConfig.autoBroadcast"
+            v-show="scope.row.defaultBroadcastConfig.autoBroadcast && account.saveCookies"
           ></i>
           <i
             class="el-icon-error"
             style="color:#F56C6C"
-            v-show="!scope.row.defaultBroadcastConfig.autoBroadcast"
+            v-show="!scope.row.defaultBroadcastConfig.autoBroadcast || !account.saveCookies"
           ></i>
         </template>
       </el-table-column>
@@ -99,13 +99,22 @@
     >
       <el-form :model="channelInfo">
         <el-form-item
-          v-for="item in tableHeader"
-          :label="item.label"
-          :key="item.prop"
+          label="频道名称"
+          key="channelName"
           label-width="120px"
         >
           <el-input
-            v-model="channelInfo[`${item.prop}`]"
+            v-model="channelInfo.channelName"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="频道地址"
+          key="channelUrl"
+          label-width="120px"
+        >
+          <el-input
+            v-model="channelInfo.channelUrl"
             autocomplete="off"
           ></el-input>
         </el-form-item>
@@ -119,7 +128,8 @@
           label="自动推流设置"
           label-width="120px"
         >
-          <el-checkbox v-model="channelInfo.defaultBroadcastConfig.autoBroadcast">自动推流</el-checkbox>
+          <el-checkbox v-if="account.saveCookies" v-model="channelInfo.defaultBroadcastConfig.autoBroadcast">自动推流</el-checkbox>
+          <el-checkbox v-if="!account.saveCookies" disabled>自动推流(必须先开启自动保存Cookies功能)</el-checkbox>
           <el-checkbox
             v-if="channelInfo.defaultBroadcastConfig.autoBroadcast"
             v-model="channelInfo.defaultBroadcastConfig.autoBlur"
@@ -167,15 +177,64 @@
     >
       <el-form :model="channelInfo">
         <el-form-item
-          v-for="item in tableHeader"
-          :label="item.label"
-          :key="item.prop"
+          label="频道名称"
+          key="channelName"
           label-width="120px"
         >
           <el-input
-            v-model="channelInfo[`${item.prop}`]"
+            v-model="channelInfo.channelName"
             autocomplete="off"
           ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="频道地址"
+          key="channelUrl"
+          label-width="120px"
+        >
+          <el-input
+            v-model="channelInfo.channelUrl"
+            autocomplete="off"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          label="默认开播分区"
+          label-width="120px"
+        >
+          <area-selector v-model="channelInfo.defaultBroadcastConfig.area"></area-selector>
+        </el-form-item>
+        <el-form-item
+          label="自动推流设置"
+          label-width="120px"
+        >
+          <el-checkbox v-if="account.saveCookies" v-model="channelInfo.defaultBroadcastConfig.autoBroadcast">自动推流</el-checkbox>
+          <el-checkbox v-if="!account.saveCookies" disabled>自动推流(必须先开启自动保存Cookies功能)</el-checkbox>
+          <el-checkbox
+            v-if="channelInfo.defaultBroadcastConfig.autoBroadcast"
+            v-model="channelInfo.defaultBroadcastConfig.autoBlur"
+          >
+            自动评论区打码
+            <el-tooltip
+              v-if="channelInfo.defaultBroadcastConfig.autoBroadcast"
+              class="item"
+              effect="dark"
+              content="请确保拥有足够的AP点数，否则此设置无效！"
+              placement="top"
+            >
+              <i class="el-icon-warning"></i>
+            </el-tooltip>
+          </el-checkbox>
+          <el-checkbox
+            v-if="channelInfo.defaultBroadcastConfig.autoBroadcast"
+            v-model="channelInfo.defaultBroadcastConfig.autoImageSegment"
+          >自动分离人物形象</el-checkbox>
+        </el-form-item>
+        <el-form-item
+          label="其他设置"
+          label-width="120px"
+        >
+          <el-checkbox v-model="channelInfo.defaultBroadcastConfig.needRecord">
+            自动开启录像
+          </el-checkbox>
         </el-form-item>
       </el-form>
       <span
@@ -216,7 +275,7 @@ export default {
     var account = JSON.parse(sessionStorage.getItem("account"));
     if (account.admin) {
       tableHeader = [
-        { prop: "nickname", label: "账号昵称" },
+        { prop: "nickName", label: "账号昵称", width: "200px" },
         { prop: "channelName", label: "频道名称", width: "300px" },
         { prop: "channelUrl", label: "频道地址" }
       ];

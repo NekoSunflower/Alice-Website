@@ -143,7 +143,6 @@
       src="./assets/alice_half_body.jpg"
     >
     <el-dialog
-      v-loading="loading"
       :title="`登录${accountSiteLabel}`"
       :visible.sync="userpwdDialog"
       :show-close="false"
@@ -443,7 +442,7 @@ export default {
       img.src = src;
     },
     login() {
-      this.loading = true;
+      var loading =  this.$loading({ fullscreen: true })
       this.$http
         .post("/api/login/login.json?loginMode=" + this.loginMode, {
           cookies: this.cookies,
@@ -454,7 +453,9 @@ export default {
         })
         .then(
           function(response) {
-            this.loading = false;
+            this.$nextTick(() => {
+              loading.close();
+            });
             // 这里是处理正确的回调
             if (response.data.code === 0) {
               sessionStorage.setItem("account", JSON.stringify(response.data.data));

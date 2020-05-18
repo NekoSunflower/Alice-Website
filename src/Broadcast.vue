@@ -354,6 +354,7 @@ export default {
     var account = JSON.parse(sessionStorage.getItem("account"));
     if (account.admin) {
       tableHeader = [
+        { prop: "from", label: "推流归属" },
         { prop: "nickname", label: "推流账号" },
         { prop: "roomId", label: "直播间ID" },
         { prop: "accountSite", label: "推流平台" },
