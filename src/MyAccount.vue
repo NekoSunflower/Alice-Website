@@ -25,37 +25,6 @@
           ></el-input>
         </el-form-item>
         <el-form-item
-          label="默认转播分辨率"
-          label-width="120px"
-        >
-          <el-select
-            v-model="account.broadcastResolution"
-            placeholder="请选择转播分辨率"
-            style="width:100%"
-          >
-            <el-option
-              :label="`480P@30FPS 价格:${account.serverPoints[1]}AP/小时`"
-              value="R480F30"
-            ></el-option>
-            <el-option
-              :label="`720P@30FPS 价格:${account.serverPoints[1]}AP/小时`"
-              value="R720F30"
-            ></el-option>
-            <el-option
-              :label="`720P@60FPS 价格:${account.serverPoints[2]}AP/小时`"
-              value="R720F60"
-            ></el-option>
-            <el-option
-              :label="`1080P@30FPS 价格:${account.serverPoints[2]}AP/小时`"
-              value="R1080F30"
-            ></el-option>
-            <el-option
-              :label="`1080P@60FPS 价格:${account.serverPoints[2]}AP/小时`"
-              value="R1080F60"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item
           v-if="account.accountSite == 'bilibili'"
           label="推流设置"
           label-width="120px"

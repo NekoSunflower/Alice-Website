@@ -151,6 +151,39 @@
           >自动分离人物形象</el-checkbox>
         </el-form-item>
         <el-form-item
+          label="默认转播分辨率"
+          label-width="120px"
+          v-if="channelInfo.defaultBroadcastConfig.autoBroadcast"
+        >
+          <el-select
+            v-if="channelInfo.defaultBroadcastConfig.autoBroadcast"
+            v-model="channelInfo.defaultBroadcastConfig.broadcastResolution"
+            placeholder="请选择转播分辨率"
+            style="width:100%"
+          >
+            <el-option
+              :label="`480P@30FPS 价格:${account.serverPoints[1]}AP/小时`"
+              value="R480F30"
+            ></el-option>
+            <el-option
+              :label="`720P@30FPS 价格:${account.serverPoints[1]}AP/小时`"
+              value="R720F30"
+            ></el-option>
+            <el-option
+              :label="`720P@60FPS 价格:${account.serverPoints[2]}AP/小时`"
+              value="R720F60"
+            ></el-option>
+            <el-option
+              :label="`1080P@30FPS 价格:${account.serverPoints[2]}AP/小时`"
+              value="R1080F30"
+            ></el-option>
+            <el-option
+              :label="`1080P@60FPS 价格:${account.serverPoints[2]}AP/小时`"
+              value="R1080F60"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item
           label="其他设置"
           label-width="120px"
         >
@@ -227,6 +260,39 @@
             v-if="channelInfo.defaultBroadcastConfig.autoBroadcast"
             v-model="channelInfo.defaultBroadcastConfig.autoImageSegment"
           >自动分离人物形象</el-checkbox>
+        </el-form-item>
+        <el-form-item
+          label="默认转播分辨率"
+          label-width="120px"
+          v-if="channelInfo.defaultBroadcastConfig.autoBroadcast"
+        >
+          <el-select
+            v-if="channelInfo.defaultBroadcastConfig.autoBroadcast"
+            v-model="channelInfo.defaultBroadcastConfig.broadcastResolution"
+            placeholder="请选择转播分辨率"
+            style="width:100%"
+          >
+            <el-option
+              :label="`480P@30FPS 价格:${account.serverPoints[1]}AP/小时`"
+              value="R480F30"
+            ></el-option>
+            <el-option
+              :label="`720P@30FPS 价格:${account.serverPoints[1]}AP/小时`"
+              value="R720F30"
+            ></el-option>
+            <el-option
+              :label="`720P@60FPS 价格:${account.serverPoints[2]}AP/小时`"
+              value="R720F60"
+            ></el-option>
+            <el-option
+              :label="`1080P@30FPS 价格:${account.serverPoints[2]}AP/小时`"
+              value="R1080F30"
+            ></el-option>
+            <el-option
+              :label="`1080P@60FPS 价格:${account.serverPoints[2]}AP/小时`"
+              value="R1080F60"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item
           label="其他设置"

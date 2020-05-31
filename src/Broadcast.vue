@@ -203,8 +203,10 @@
         <el-form-item
           label="直播分区"
           label-width="100px"
+          v-if="account.accountSite == 'bilibili'"
         >
           <area-selector
+            v-if="account.accountSite == 'bilibili'"
             v-model="editItem.area"
             :value="editItem.area"
           ></area-selector>
@@ -212,8 +214,10 @@
         <el-form-item
           label="直播间标题"
           label-width="100px"
+          v-if="account.accountSite == 'bilibili'"
         >
           <el-input
+            v-if="account.accountSite == 'bilibili'"
             v-model="editItem.roomTitle"
             placeholder="[无需修改请留空]"
           ></el-input>
