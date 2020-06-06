@@ -441,27 +441,6 @@ export default {
           showCancelButton: false,
           type: "error"
         });
-        return;
-      } else if (this.editItem.cropConf.broadcastResolution == "R1080F60") {
-        //   this.$confirm(
-        //     <p>
-        //       您选择了1080P@60FPS转播分辨率，该分辨率下部分视频流无法达到流畅观看的性能要求，是否继续保存？
-        //       <br />
-        //       <b>
-        //         提示：使用自定义图片、矩形（圆角矩形）代替高斯模糊可以有效降低性能需求。
-        //       </b>
-        //     </p>,
-        //     "性能警告",
-        //     {
-        //       confirmButtonText: "继续",
-        //       cancelButtonText: "取消",
-        //       type: "warning"
-        //     }
-        //   )
-        //     .then(() => {
-        //       this.doCropConfSave();
-        //     })
-        //     .catch(() => {});
       } else {
         this.doCropConfSave();
       }
