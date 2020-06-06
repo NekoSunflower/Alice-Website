@@ -191,7 +191,7 @@
             style="margin-left:30px;"
             v-model="editItem.audioBanned"
           >强制单声道</el-checkbox>
-          <el-checkbox v-model="editItem.vertical">竖屏直播</el-checkbox>
+          <el-checkbox v-if="account.accountSite == 'bilibili'" v-model="editItem.vertical">竖屏直播</el-checkbox>
           <el-tag
             type="info"
             disable-transitions

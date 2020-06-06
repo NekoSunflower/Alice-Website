@@ -119,10 +119,11 @@
           ></el-input>
         </el-form-item>
         <el-form-item
+          v-if="account.accountSite == 'bilibili'"
           label="默认开播分区"
           label-width="120px"
         >
-          <area-selector v-model="channelInfo.defaultBroadcastConfig.area"></area-selector>
+          <area-selector v-if="account.accountSite == 'bilibili'" v-model="channelInfo.defaultBroadcastConfig.area"></area-selector>
         </el-form-item>
         <el-form-item
           label="自动推流设置"
@@ -230,10 +231,11 @@
           ></el-input>
         </el-form-item>
         <el-form-item
+          v-if="account.accountSite == 'bilibili'"
           label="默认开播分区"
           label-width="120px"
         >
-          <area-selector v-model="channelInfo.defaultBroadcastConfig.area"></area-selector>
+          <area-selector v-if="account.accountSite == 'bilibili'" v-model="channelInfo.defaultBroadcastConfig.area"></area-selector>
         </el-form-item>
         <el-form-item
           label="自动推流设置"
