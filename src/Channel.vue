@@ -31,29 +31,12 @@
           <i
             class="el-icon-success"
             style="color:#67C23A"
-            v-show="scope.row.defaultBroadcastConfig.autoBroadcast && account.saveCookies"
+            v-show="scope.row.defaultBroadcastConfig.autoBroadcast"
           ></i>
           <i
             class="el-icon-error"
             style="color:#F56C6C"
-            v-show="!scope.row.defaultBroadcastConfig.autoBroadcast || !account.saveCookies"
-          ></i>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="自动录像"
-        width="160px"
-      >
-        <template slot-scope="scope">
-          <i
-            class="el-icon-success"
-            style="color:#67C23A"
-            v-show="scope.row.defaultBroadcastConfig.needRecord"
-          ></i>
-          <i
-            class="el-icon-error"
-            style="color:#F56C6C"
-            v-show="!scope.row.defaultBroadcastConfig.needRecord"
+            v-show="!scope.row.defaultBroadcastConfig.autoBroadcast"
           ></i>
         </template>
       </el-table-column>

@@ -12,11 +12,6 @@
       target="_blank"
       style="float:right;"
     >
-      <el-button
-        type="primary"
-        size="medium"
-        icon="el-icon-document"
-      >查看录像</el-button>
     </a>
     <hr />
     <PagedTable
