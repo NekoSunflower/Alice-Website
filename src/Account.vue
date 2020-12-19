@@ -19,20 +19,6 @@
           {{ scope.row.point }}
         </template>
       </el-table-column>
-      <el-table-column label="允许推流调配" width="150px">
-        <template slot-scope="scope">
-          <i
-            class="el-icon-success"
-            style="color:#67C23A"
-            v-show="scope.row.joinAutoBalance"
-          ></i>
-          <i
-            class="el-icon-error"
-            style="color:#F56C6C"
-            v-show="!scope.row.joinAutoBalance"
-          ></i>
-        </template>
-      </el-table-column>
       <el-table-column label="状态" width="80px">
         <template slot-scope="scope">
           <el-tag
@@ -66,7 +52,7 @@
               <el-button
                 type="primary"
                 size="mini"
-                @click="removeAccount(scope.row.accountId, scope.$index)"
+                @click="removeAccount(scope.row.accountId, scope.row.accountSite, scope.$index)"
                 >继续</el-button
               >
             </div>
@@ -77,7 +63,7 @@
           <el-button
             size="mini"
             type="primary"
-            @click="billList(scope.row.accountId, scope.$index)"
+            @click="billList(scope.row.accountId, scope.row.accountSite, scope.$index)"
             >账单</el-button
           >
         </template>
@@ -90,7 +76,7 @@
       <el-button
         size="mini"
         type="primary"
-        @click="apPointChange(billAccountId)"
+        @click="apPointChange(billAccountId, billAccountSite)"
         >AP点数变更</el-button
       >
       <PagedTable
@@ -129,6 +115,7 @@ export default {
         { prop: "nickname", label: "推流账号" },
         { prop: "roomId", label: "直播间ID" },
         { prop: "accountSite", label: "推流平台" },
+        { prop: "parentAccountName", label: "父账号" },
         { prop: "description", label: "描述" }
       ],
       loading: false,
@@ -140,6 +127,7 @@ export default {
       ],
       billListVisible: false,
       billAccountId: "",
+      billAccountSite:"",
       detailVisible: false,
       editVisible: false,
       addVisible: false,
@@ -171,7 +159,7 @@ export default {
         }
       );
     },
-    apPointChange(accountId) {
+    apPointChange(accountId, accountSite) {
       this.$prompt("请输入要变更的AP点数", "AP点数变更", {
         inputType: "number"
       })
@@ -180,7 +168,7 @@ export default {
           this.$http
             .post(
               "/api/account/apPointChange.json?accountId=" +
-                accountId +
+                accountId +"&accountSite=" + accountSite + 
                 "&point=" +
                 value
             )
@@ -199,7 +187,7 @@ export default {
                       type: "success"
                     }
                   );
-                  this.billList(accountId);
+                  this.billList(accountId, accountSite);
                 } else {
                   this.$message.error(response.data.message);
                   this.loading = false;
@@ -216,8 +204,8 @@ export default {
         })
         .catch(() => {});
     },
-    removeAccount(accountId, index) {
-      let apiUrl = "/api/account/removeAccount.json?accountId=" + accountId;
+    removeAccount(accountId, accountSite, index) {
+      let apiUrl = "/api/account/removeAccount.json?accountId=" + accountId + "&accountSite=" + accountSite;
       this.$http.get(apiUrl).then(
         function(response) {
           // 这里是处理正确的回调
@@ -288,11 +276,12 @@ export default {
         }
       );
     },
-    billList(accountId) {
+    billList(accountId, accountSite) {
       this.loading = true;
       this.billAccountId = accountId;
+      this.billAccountSite = accountSite;
       this.billListVisible = true;
-      this.$http.get("/api/account/billList.json?accountId=" + accountId).then(
+      this.$http.get("/api/account/billList.json?accountId=" + accountId + "&accountSite=" + accountSite).then(
         function(response) {
           // 这里是处理正确的回调
           if (response.data.code === 0) {

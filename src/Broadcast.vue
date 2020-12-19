@@ -24,7 +24,7 @@
       :tableHeader="tableHeader"
       :loading="loading"
     >
-      <el-table-column
+      <!--<el-table-column
         label="是否录像"
         width="106"
       >
@@ -35,7 +35,7 @@
             v-show="scope.row.needRecord"
           ></i>
         </template>
-      </el-table-column>
+      </el-table-column>-->
       <el-table-column
         label="推流健康度"
         width="106"
@@ -222,12 +222,7 @@
             placeholder="[无需修改请留空]"
           ></el-input>
         </el-form-item>
-        <el-form-item
-          label="其他设置"
-          label-width="100px"
-        >
-          <el-checkbox v-model="editItem.needRecord">直播后保存录像</el-checkbox>
-          <el-button
+        <el-button
             v-if="account.admin"
             v-loading="loading"
             :disabled="loading"
@@ -236,7 +231,12 @@
             size="small"
             @click="terminateTask(editItem.videoId)"
           >终止推流任务</el-button>
-        </el-form-item>
+        <!--<el-form-item
+          label="其他设置"
+          label-width="100px"
+        >
+          <el-checkbox v-model="editItem.needRecord">直播后保存录像</el-checkbox>
+        </el-form-item>-->
       </el-form>
       <span
         slot="footer"
@@ -363,12 +363,14 @@ export default {
         { prop: "roomId", label: "直播间ID" },
         { prop: "accountSite", label: "推流平台" },
         { prop: "channelName", label: "节目频道" },
-        { prop: "videoTitle", label: "节目标题", width: "460px" }
+        { prop: "videoTitle", label: "节目标题", width: "460px"}
       ];
     } else {
       tableHeader = [
+        { prop: "roomId", label: "直播间ID" },
+        { prop: "accountSite", label: "推流平台" },
         { prop: "channelName", label: "节目频道" },
-        { prop: "videoTitle", label: "节目标题", width: "460px" }
+        { prop: "videoTitle", label: "节目标题" , width: "500px"}
       ];
     }
     return {
@@ -436,7 +438,7 @@ export default {
       );
     },
     cropConfSave() {
-      if (!this.editItem.cropConf.broadcastResolution) {
+      if (this.editItem.cropConf.videoBannedType == 'CUSTOM_SCREEN' && !this.editItem.cropConf.broadcastResolution) {
         this.$confirm("请选择转播分辨率", "提示", {
           showCancelButton: false,
           type: "error"

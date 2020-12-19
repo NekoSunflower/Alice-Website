@@ -184,14 +184,14 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
+        <!--<el-form-item
           label="其他设置"
           label-width="120px"
         >
           <el-checkbox v-model="channelInfo.defaultBroadcastConfig.needRecord">
             自动开启录像
           </el-checkbox>
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <span
         slot="footer"
@@ -296,14 +296,14 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item
+        <!--<el-form-item
           label="其他设置"
           label-width="120px"
         >
           <el-checkbox v-model="channelInfo.defaultBroadcastConfig.needRecord">
             自动开启录像
           </el-checkbox>
-        </el-form-item>
+        </el-form-item>-->
       </el-form>
       <span
         slot="footer"

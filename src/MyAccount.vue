@@ -32,7 +32,7 @@
           <el-checkbox v-model="account.postBiliDynamic">发送B站开播动态</el-checkbox>
           <el-checkbox v-model="account.autoRoomTitle">自动修改直播间标题</el-checkbox>
         </el-form-item>
-        <template v-if="account.accountSite == 'qq_oauth2' || account.accountSite == 'google_oauth2'">
+        <template v-if="(account.accountSite == 'qq_oauth2' || account.accountSite == 'google_oauth2') && !account.parentAccountName">
           <el-form-item
             label="串流地址"
             label-width="120px"
@@ -53,7 +53,7 @@
           </el-form-item>
         </template>
         <el-form-item
-          v-else
+          v-else-if="!account.parentAccountName"
           label="自动保存Cookies"
           label-width="120px"
         >
@@ -71,11 +71,11 @@
       >保存</el-button>
     </el-tab-pane>
     <el-tab-pane
-      label="AP共享管理"
+      label="账号共享管理"
       style="width:640px"
     >
       <el-alert
-        title="您可以在这里查看、管理你的共享码，和其他账号共享账号中的AP点数。"
+        title="您可以在这里查看、管理你的共享码，和其他账号共享账号中的AP点数及您的直播间推流权限。"
         type="info"
         :closable="false"
         show-icon
@@ -91,7 +91,7 @@
         >解除绑定</el-button>
       </p>
       <div v-if="!account.parentAccountName">
-        <el-input v-model="account.shareCode">
+        <el-input v-model="account.shareCode" readonly >
           <el-button
             slot="append"
             @click="createShareCode"
@@ -131,6 +131,7 @@
             type="primary"
             :loading="loading"
             @click="bindShareCode"
+            v-if="account.shardAccounts.length == 0"
           >绑定共享码</el-button>
         </p>
       </div>
@@ -196,7 +197,7 @@ export default {
     },
     unbindSubAccount(row) {
       this.$http
-        .post("/api/account/unbindSubAccount.json?accountId=" + row.accountId)
+        .post("/api/account/unbindSubAccount.json?accountId=" + row.accountId + "&accountSite=" + row.accountSite)
         .then(
           function(response) {
             // 这里是处理正确的回调
